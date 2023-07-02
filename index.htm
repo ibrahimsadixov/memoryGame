@@ -236,7 +236,7 @@ game.innerHTML=""
 
       allCells.forEach(element => {
         element.addEventListener("click", () => {
-          if (!clickEnabled || element.querySelector('.closer-disabled')) {
+          if (!clickEnabled || element.querySelector('.closer-disabled'|| element.classList.contains("correct"))) {
             return;
           }
 
