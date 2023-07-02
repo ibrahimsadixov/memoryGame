@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <title>Memory Game</title>
+
+</head>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(24, 24, 24);
+  }
+
+  .game {
+    margin-top: 100px;
+    min-height: 400px;
+    width: 550px;
+    background-color: rgb(63, 67, 70);
+    border: 1px solid transparent;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+    padding: 25px 25px;
+
+
+  }
+
+  .cells {
+    height: 100px;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    cursor: pointer;
+    border: 0 solid transparent;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+
+
+  }
+
+  .closer {
+    background-color: aliceblue !important;
+    background-image: none !important;
+    transition: .3s;
+    height: 100%;
+    width: 100%;
+  }
+
+  .closer-disabled {
+    height: 0 !important;
+    transition: .3s;
+
+  }
+
+  .correct {
+    background-color: aliceblue !important;
+    background-image: none !important;
+
+
+  }
+
+  .correct::before {
+    content: "CORRECT!";
+    transition: .3s;
+    color: green;
+    font-size: 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+  }
+
+  #try {
+    position: absolute;
+    top: 25px;
+    right: 50px;
+    color: white;
+    z-index: 2;
+    font-size: 2rem;
+  }
+
+
+  .lose::before {
+    content: "GAME OVER!";
+    transition: 1s;
+    color: red;
+    font-size: 2rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+  }
+
+  .win::before {
+    content: "YOU WON!";
+    transition: 1s;
+    color: green;
+    font-size: 2rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+  }
+  .restart {
+    height: 40px;
+    width: 200px;
+    border: 0 solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    color: rgb(46, 46, 88);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  .timer{
+    position: absolute;
+    top: 50px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 3rem;
+  font-family: tahoma;
+  }
+  #play{
+    height: 40px;
+    width: 200px;
+    border: 0 solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    color: rgb(46, 46, 88);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+</style>
+
+<body>
+  <div id="try"><i id="heart" class="fa-solid fa-heart"></i></div>
+  <div class="container">
+    <div class="timer"></div>
+
+    <div class="game">
+<button id="play">PLAY</button>
+    </div>
+
+  </div>
+
+  <script>
+
+
+    const game = document.querySelector(".game");
+    const heart = document.getElementById("heart")
+
+    let images = ["130502152627-rubber-duck-in-hong-kong-1.jpg", "350343179_818863316236007_3685917728731564840_n.jpg", "vahid.jpg",
+      "artworks-MuvOmkrrPWOfVCGZ-EdSazw-t500x500.jpg", "avatars-000475027515-1tp5gg-t500x500.jpg", "Naruto_newshot.webp"]
+    const numbers = [0, 1, 2, 3, 4, 5];
+    const numbersCopy = [...numbers, ...numbers];
+    play.addEventListener("click",()=>{
+      create()
+    })
+    function create() {
+      
+      function startTimer() {
+  let time = 3;
+  const timerElement = document.querySelector(".timer");
+  timerElement.textContent = time;
+
+  const intervalId = setInterval(() => {
+    time--;
+    timerElement.textContent = time;
+
+    if (time === 0) {
+      setTimeout(() => {
+        
+        clearInterval(intervalId);
+        timerElement.innerHTML = "";
+      }, 500);
+    }
+  }, 1000);
+}
+
+
+startTimer();
+
+game.innerHTML=""
+
+
+      for (let i = numbersCopy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [numbersCopy[i], numbersCopy[j]] = [numbersCopy[j], numbersCopy[i]];
+      }
+
+      for (let i = 0; i < numbersCopy.length; i++) {
+        const cells = document.createElement("div");
+        cells.classList.add("cells");
+        cells.classList.add("cell" + i);
+        cells.dataset.number = numbersCopy[i];
+        cells.style.background = "url(./assets/images/" + images[numbersCopy[i]] + ")";
+        cells.style.backgroundSize = "cover"
+        cells.style.backgroundRepeat = "no-repeat"
+
+        game.appendChild(cells);
+
+        setTimeout(() => {
+          const closer = document.createElement("div");
+          closer.classList.add("closer");
+          cells.appendChild(closer);
+          clickEnabled = true;
+
+        }, 3000);
+      }
+
+
+      const allCells = document.querySelectorAll(".cells");
+      let selected = [];
+      let selectedCells = [];
+      var clickEnabled = false;
+      let chance = 2
+      let correct = 0
+
+      allCells.forEach(element => {
+        element.addEventListener("click", () => {
+          if (!clickEnabled || element.querySelector('.closer-disabled')) {
+            return;
+          }
+
+          const clickedClass = element.dataset.number;
+          const clickedCell = element.classList[1];
+
+          if (selectedCells.length === 2 && selectedCells[1] === selectedCells[0]) {
+            return;
+          }
+
+
+
+          selectedCells.push(clickedCell);
+
+          if (selected.length != 2) {
+            selected.push(clickedClass);
+          } else if (selected.length === 2) {
+            selected = [];
+            selectedCells = [];
+            selected.push(clickedClass);
+            selectedCells.push(clickedCell);
+          }
+          else if (selectedCells.includes(clickedCell)) {
+            return;
+          }
+          const closers = document.querySelectorAll(selectedCells.map(cell => `.${cell} .closer`).join(", "));
+          closers.forEach(element => element.classList.add("closer-disabled"));
+
+          console.log("Selected classes:", selected);
+
+          if (selected.length === 2 && selected[1] === selected[0]) {
+            console.log("dogru");
+            clickEnabled = false;
+            correct = correct + 1
+
+            if (correct===6) {
+              setTimeout(() => {
+              game.innerHTML=""
+                game.classList.add("win")
+                setTimeout(() => {
+                  const restart = document.createElement("button")
+                 
+                  restart.classList.add("restart");
+                  restart.innerHTML = "RESTART"
+                  game.style.flexDirection="column"
+
+                  game.appendChild(restart)
+                  const restartBtn = document.querySelector(".restart")
+  restartBtn.addEventListener("click", () => {
+    console.log("done")
+    create()
+    restartBtn.remove()
+    heart.classList = "fa-solid fa-heart"
+    game.classList.remove("win")
+    game.style.flexDirection="row"
+  })
+                }, 700);
+              
+}, 500);
+            }
+
+            setTimeout(() => {
+              const correctElements = document.querySelectorAll(selectedCells.map(cell => `.${cell}`).join(", "));
+              correctElements.forEach(element => element.classList.add("correct"));
+              const closers = document.querySelectorAll(selectedCells.map(cell => `.${cell} .closer`).join(", "));
+              closers.forEach(element => element.remove());
+              clickEnabled = true;
+
+            }, 400);
+
+          } else if (selected.length === 2 && selected[1] != selected[0]) {
+            console.log("yanlis");
+
+            chance = chance - 1
+            clickEnabled = false;
+
+            setTimeout(() => {
+              const closers = document.querySelectorAll(selectedCells.map(cell => `.${cell} .closer`).join(", "));
+              closers.forEach(element => element.classList.remove("closer-disabled"));
+
+              clickEnabled = true;
+              heart.classList = "fa-regular fa-heart"
+
+            }, 500);
+            if (chance === 0) {
+
+              setTimeout(() => {
+                game.innerHTML = ""
+                game.classList.add("lose")
+                setTimeout(() => {
+                  game.classList.remove("lose")
+
+                  const restart = document.createElement("button")
+
+                  restart.classList.add("restart");
+                  restart.innerHTML = "RESTART"
+
+                  game.appendChild(restart)
+                  const restartBtn = document.querySelector(".restart")
+  restartBtn.addEventListener("click", () => {
+    console.log("done")
+    create()
+    restartBtn.remove()
+    heart.classList = "fa-solid fa-heart"
+  })
+
+                }, 700);
+              }, 500);
+            }
+          }
+     
+        });
+      });
+
+
+    }
+
+  </script>
+</body>
+
+</html>
